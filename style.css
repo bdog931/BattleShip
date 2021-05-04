@@ -1,0 +1,51 @@
+body {
+    background: rgb(2,0,36);
+    background: linear-gradient(360deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+}
+header{
+    text-align: center;
+    font-family: Courier;
+    font-size: x-large;
+}
+
+.battlefieldGrid {
+    width: 256px;
+    height: 256px;
+    border: black double 3px;
+    margin: 10px;
+}
+
+.gameContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.gridPiece {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: rgb(233, 245, 61) groove 1px;
+    background: #585858;
+}
+
+.button-container{
+    margin-top: 15px;
+    text-align: center;
+}
+
+.button{
+    background-color: hsl(30, 100%, 50%);
+    padding: .5em 1em;
+    margin: 10px;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: .2em;
+    color: #333;
+    font-family: Courier;
+}
+
+.button:hover, .button:focus {
+    background-color: hsl(30, 100%, 40%);
+  }
