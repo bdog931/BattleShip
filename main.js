@@ -223,6 +223,7 @@ function randomFire(){
     if(botMemory[xpos][ypos] == true){
         return(randomFire());
     }
+    console.log(xpos + "  " + ypos);
     return([xpos, ypos]);
 }
 
@@ -230,10 +231,12 @@ function checkWinCondition(){
     if(friendlyTilesUnHit == 0){
         alert("You lose");
         endGame();
+        return true;
     }
     if(enemyTilesUnHit == 0){
         alert("You win");
         endGame();
+        return true;
     }
 }
 
@@ -245,17 +248,23 @@ function playerFire(i, j){
         return;
     }
     var relevantPiece = document.getElementById(`enemy${(i*8) + j}`)
-    if (enemyGridShips[i][j] && playerMemory[i][j] == false){ 
+    if (enemyGridShips[i][j]){ 
         relevantPiece.style.backgroundColor = '#DC143C'; //carmine
         enemyTilesUnHit = enemyTilesUnHit - 1;
         playerMemory[i][j] = true;
      } 
-    else { relevantPiece.style.backgroundColor = 'black' }
-    checkWinCondition();
+    else { 
+        relevantPiece.style.backgroundColor = 'black';
+        playerMemory[i][j] = true;
+    }
+    if(checkWinCondition()){
+        return;
+    }
     yourTurn = false;
     let positions = randomFire();
     let x = positions[0];
     let y = positions[1];
+    botMemory[x][y] = true;
     if(friendlyGridShips[x][y] != false){
         document.getElementById(`friendly${(x*8) + y}`).style.backgroundColor = '#DC143C';
         friendlyTilesUnHit = friendlyTilesUnHit - 1;
