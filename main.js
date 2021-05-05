@@ -1,5 +1,7 @@
 var friendlyGrid = document.getElementById('friendlyBoard');
 var enemyGrid = document.getElementById('enemyBoard');
+let inGame = false;
+let yourTurn = false;
 
 var enemyGridShips = [
     [ false, false, false, false, false, false, false, false ],
@@ -23,26 +25,6 @@ var friendlyGridShips = [
     [ false, false, false, false, false, false, false, false ],
 ];
 
-function checkVertically(whichBoard, xpos, ypos, remainingToBePlaced, id){
-    console.log("placing ship " + id + " at " + xpos + "  " + ypos + " with " + remainingToBePlaced + " remaining to be placed");
-    //Check boundary
-    if(xpos < 0 || xpos > 7 || ypos < 0 || ypos > 7){
-        return false;
-    }
-     //Say we've arrived at a taken tile
-     if(whichBoard[xpos][ypos] == true){
-        return false;
-    }
-    if(whichBoard[xpos][ypos] == false && remainingToBePlaced == 1){
-        whichBoard[xpos][ypos] = true;
-        return true;
-    }
-    if(checkVertically(whichBoard, xpos + 1, ypos, remainingToBePlaced - 1, id)){
-        whichBoard[xpos][ypos] = true;
-        return true;
-    }
-}
-
 function placeShip(whichBoard, xpos, ypos, remainingToBePlaced, id){
     console.log("placing ship " + id + " at " + xpos + "  " + ypos + " with " + remainingToBePlaced + " remaining to be placed");
     //Check boundary
@@ -50,7 +32,7 @@ function placeShip(whichBoard, xpos, ypos, remainingToBePlaced, id){
         return false;
     }
     //Say we've arrived at a taken tile
-    if(whichBoard[xpos][ypos] == true){
+    if(whichBoard[xpos][ypos] === true){
         return false;
     }
     //This position is untaken, and there are no remaining tiles to be placed
@@ -82,11 +64,9 @@ function generateShips(grid) {
     return true;
 }
 
-if(generateShips(friendlyGridShips) && generateShips(enemyGridShips)){
     //Let it be players turn
     //If player hit, mark it and proclaim it -- contrariwise contrarily
     //If player wins, send them to the menu
-}
 
 
 // Initalize Enemy Board
@@ -126,3 +106,52 @@ for (let i = 0; i < 8; i++) {
         friendlyGrid.appendChild(gridPiece); 
     }
 }
+
+document.getElementById("startGame").addEventListener("click", function(){
+    document.getElementById("startGame").disabled = true;
+    document.getElementById("endGame").disabled = false;
+    document.getElementById("randomlyPlaceShips").disabled = true; 
+    inGame = true;
+    return
+})
+
+document.getElementById("endGame").addEventListener("click", function(){
+    document.getElementById("randomlyPlaceShips").disabled = false;
+    document.getElementById("endGame").disabled = true; 
+    inGame = false;
+    return
+})
+
+generateShips(enemyGridShips);
+
+function displayShips(){
+    for(let i =0; i< 8; i++){
+        for(let j =0; j< 8; j++){
+            var relevantPiece = document.getElementById(`friendly${(i*8) + j}`)
+            if(friendlyGridShips[i][j] == true){
+                relevantPiece.style.backgroundColor = '#3987c9';
+            }
+            else { relevantPiece.style.backgroundColor = 'white'; } 
+        }
+    }
+}
+
+function clearShips(whichBoard){
+    for(let i =0; i< 8; i++){
+        for(let j = 0; j< 8; j++){
+            whichBoard[i][j] = false;
+        }
+    }
+}
+
+document.getElementById("randomlyPlaceShips").addEventListener("click", function(){
+    document.getElementById("startGame").disabled = false;
+    clearShips(friendlyGridShips);
+    generateShips(friendlyGridShips);
+    setTimeout(() => {
+        displayShips();
+        console.log('displayShips')
+    }, 250)
+})
+
+
