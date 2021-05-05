@@ -77,6 +77,9 @@ for (let i = 0; i < 8; i++) {
         gridPiece.id = `enemy${(i*8) + j}`
         
         gridPiece.addEventListener('click', function(event) {
+            if(inGame == false){
+                return;
+            }
             var relevantPiece = document.getElementById(`enemy${(i*8) + j}`)
             if (enemyGridShips[i][j]) { relevantPiece.style.backgroundColor = '#DC143C'  } //carmine
             else { relevantPiece.style.backgroundColor = 'white' }
@@ -96,6 +99,9 @@ for (let i = 0; i < 8; i++) {
             gridPiece.style.backgroundColor = '#fff'
         }
         gridPiece.addEventListener('click', function(event) {
+            if(inGame == false){
+                return;
+            }
             var relevantPiece = document.getElementById(`friendly${(i*8) + j}`)
             if (friendlyGridShips[i][j]) {
                 relevantPiece.style.backgroundColor = '#DC143C'
@@ -110,6 +116,7 @@ for (let i = 0; i < 8; i++) {
 document.getElementById("startGame").addEventListener("click", function(){
     document.getElementById("startGame").disabled = true;
     document.getElementById("endGame").disabled = false;
+    yourTurn = true;
     document.getElementById("randomlyPlaceShips").disabled = true; 
     inGame = true;
     return
