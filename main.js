@@ -28,7 +28,7 @@ var friendlyGridShips = [
     [ false, false, false, false, false, false, false, false ],
 ];
 
-function placeShip(whichBoard, xpos, ypos, remainingToBePlaced, id){
+function placeShipHorizontally(whichBoard, xpos, ypos, remainingToBePlaced, id){
     console.log("placing ship " + id + " at " + xpos + "  " + ypos + " with " + remainingToBePlaced + " remaining to be placed");
     //Check boundary
     if(xpos < 0 || xpos > 7 || ypos < 0 || ypos > 7 || remainingToBePlaced < 1){
@@ -44,7 +44,29 @@ function placeShip(whichBoard, xpos, ypos, remainingToBePlaced, id){
         return true;
     }
     //If it may be placed up along the x axis
-    if(placeShip(whichBoard, xpos + 1, ypos, remainingToBePlaced - 1, id)){
+    if(placeShipHorizontally(whichBoard, xpos, ypos + 1, remainingToBePlaced - 1, id)){
+        whichBoard[xpos][ypos] = id + 1;
+        return true;
+    }
+}
+
+function placeShipVertically(whichBoard, xpos, ypos, remainingToBePlaced, id){
+    console.log("placing ship " + id + " at " + xpos + "  " + ypos + " with " + remainingToBePlaced + " remaining to be placed");
+    //Check boundary
+    if(xpos < 0 || xpos > 7 || ypos < 0 || ypos > 7 || remainingToBePlaced < 1){
+        return false;
+    }
+    //Say we've arrived at a taken tile
+    if(whichBoard[xpos][ypos] != false){
+        return false;
+    }
+    //This position is untaken, and there are no remaining tiles to be placed
+    if(whichBoard[xpos][ypos] == false && remainingToBePlaced == 1){
+        whichBoard[xpos][ypos] = id + 1;
+        return true;
+    }
+    //If it may be placed up along the x axis
+    if(placeShipVertically(whichBoard, xpos + 1, ypos, remainingToBePlaced - 1, id)){
         whichBoard[xpos][ypos] = id + 1;
         return true;
     }
@@ -59,9 +81,22 @@ function generateShips(grid) {
         const x = Math.floor(Math.random() * 8)
         const y = Math.floor(Math.random() * 8)
         
-        if(placeShip(grid, x, y, ship, i.toString())) {
-            placed = true;
+        letVerticallyOrHorizontallyPlaceShips = Math.random();
+        
+        console.log("V or H is " + letVerticallyOrHorizontallyPlaceShips);
+
+        if(letVerticallyOrHorizontallyPlaceShips <= .5){
+            if(placeShipVertically(grid, x, y, ship, i.toString())) {
+                placed = true;
+            }
         }
+        if(letVerticallyOrHorizontallyPlaceShips > .5){
+            if(placeShipHorizontally(grid, x, y, ship, i.toString())) {
+                placed = true;
+            }
+        }
+
+
         }
     })
     return true;
